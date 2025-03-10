@@ -15,7 +15,7 @@ class FirebaseService:
     def __init__(self):
         # Initialize Firebase if it hasn't been initialized yet
         if firebase_admin._DEFAULT_APP_NAME not in firebase_admin._apps:
-            cred_path = os.path.join(dir.BASE_DIR, "chatbot-mental-health-firebase-adminsdk-fbsvc-6b9c28d2dc.json")
+            cred_path = os.path.join(dir.BASE_DIR, dir.FIREBASE_CODE. )
             cred = credentials.Certificate(cred_path)
             firebase_admin.initialize_app(cred)
 
