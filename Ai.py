@@ -3,6 +3,7 @@
 import openai  # EN: Import OpenAI for AI text generation / SV: Importera OpenAI för AI-textgenerering
 from gtts import gTTS  # EN: Import Google Text-to-Speech for converting text to speech / SV: Importera Google Text-to-Speech för att konvertera text till tal
 import os  # EN: Import OS module to handle file paths / SV: Importera OS-modulen för att hantera filsökvägar
+from Dir import dir  # EN: Import Dir for managing paths and API keys / SV: Importera Dir för att hantera sökvägar och API-nycklar
 
 #
 class AI:
