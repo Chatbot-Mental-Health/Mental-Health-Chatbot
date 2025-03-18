@@ -5,7 +5,7 @@ from gtts import gTTS  # EN: Import Google Text-to-Speech for converting text to
 import os  # EN: Import OS module to handle file paths / SV: Importera OS-modulen för att hantera filsökvägar
 from Dir import dir  # EN: Import Dir for managing paths and API keys / SV: Importera Dir för att hantera sökvägar och API-nycklar
 
-
+#
 class AI:
     """EN: Class for AI-driven question and response generation, as well as text-to-speech functionality.
        SV: Klass för AI-genererad fråge- och svarsgenerering samt text-till-tal-funktionalitet."""
