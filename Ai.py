@@ -1,5 +1,3 @@
-# Ai.py
-
 import openai  # EN: Import OpenAI for AI text generation / SV: Importera OpenAI för AI-textgenerering
 from gtts import gTTS  # EN: Import Google Text-to-Speech for converting text to speech / SV: Importera Google Text-to-Speech för att konvertera text till tal
 import os  # EN: Import OS module to handle file paths / SV: Importera OS-modulen för att hantera filsökvägar
@@ -13,8 +11,8 @@ class AI:
     def __init__(self):
         self.text = ""  # EN: Stores the text used for generating questions / SV: Lagrar texten som används för att generera frågor
         self.latest_question = ""  # EN: Stores the latest generated question / SV: Lagrar den senast genererade frågan
-        self.audio_path = None  # EN: Stores the path to the generated speech file / SV: Lagrar sökvägen till den genererade ljudfilen
-        self.chat_history = []  # EN: Stores chat history for memory / SV: Lagrar chattens historik för minne
+        self.audio_path = None  # EN: Path to the generated audio file / SV: Sökväg till den genererade ljudfilen
+        self.chat_history = []  # EN: Stores chat history for context / SV: Lagrar chattens historik för sammanhang
 
         # EN: Set API key and model from Dir.py / SV: Ställ in API-nyckel och modell från Dir.py
         self.api_key = dir.OPENAI_API_KEY
@@ -22,48 +20,48 @@ class AI:
         openai.api_key = self.api_key  # EN: Set OpenAI API key / SV: Ställ in OpenAI API-nyckel
 
     def generate_response(self, user_message):
-        """EN: Generates an AI response while ensuring safety by avoiding harmful content.
+        """EN: Generates an AI response ensuring safety by avoiding harmful content.
            SV: Genererar ett AI-svar samtidigt som det säkerställs att inget skadligt innehåll inkluderas."""
         if not user_message:
-            return "I am here to listen. How can I help you?"
+            return "I'm here to listen. How can I help you?"
 
-        # EN: Store the user's message in chat history / SV: Lagra användarens meddelande i chattens historik
+        # EN: Store user's message in chat history / SV: Lagra användarens meddelande i chattens historik
         self.chat_history.append({"role": "user", "content": user_message})
         if len(self.chat_history) > 10:
-            self.chat_history.pop(0)  # EN: Keep memory limited to last 10 messages / SV: Begränsa minnet till de senaste 10 meddelandena
+            self.chat_history.pop(0)  # EN: Limit chat memory to last 10 messages / SV: Begränsa chatthistoriken till de senaste 10 meddelandena
 
         prompt = (
-            "You are a friendly and empathetic AI that helps people with emotional concerns."
-            " Always respond in a supportive, non-harmful, and positive manner."
-            " Avoid giving medical advice or discussing self-harm."
-            " Encourage the user to seek professional help when necessary."
-            " If the user shows signs of mental health issues, gently guide them to seek professional help and to contact 1177 in Sweden."
-            " Your response must always consist of exactly two complete sentences."
+            "You are a friendly and empathetic AI that helps people with emotional concerns. "
+            "Always respond in a supportive, non-harmful, and positive manner. "
+            "Avoid giving medical advice or discussing self-harm. "
+            "Encourage the user to seek professional help when necessary. "
+            "If the user shows signs of mental health issues, gently guide them to seek professional help and to contact 1177 in Sweden. "
+            "Your response must always consist of exactly two complete sentences."
         )
 
         messages = [{"role": "system", "content": prompt}] + self.chat_history
         print("📝 Generating AI response with memory...")
 
         try:
-            response = openai.ChatCompletion.create(    
+            response = openai.ChatCompletion.create(
                 model=self.model,
                 messages=messages,
-                max_tokens=70,  # EN: Limit response length to a single sentence / SV: Begränsa svarslängden till en mening
+                max_tokens=70,  # EN: Limit response length / SV: Begränsa svarslängden
                 temperature=0.3,
             )
             ai_response = response['choices'][0]['message']['content'].strip()
             print(f"✅ AI response generated: {ai_response}")
 
-            # EN: Store AI response in chat history / SV: Lagra AI-svar i chattens historik
+            # EN: Store AI response in chat history / SV: Lagra AI-svaret i chattens historik
             self.chat_history.append({"role": "assistant", "content": ai_response})
             return ai_response
         except Exception as e:
             print(f"❌ Error generating AI response: {e}")
-            return "I am having trouble generating a response at the moment. Please try again later."
+            return "I'm having trouble generating a response right now. Please try again later."
 
     def set_text(self, text):
         """EN: Sets the text used for generating questions.
-           SV: Sätter texten som används för att generera frågor."""
+           SV: Ställer in texten som används för att generera frågor."""
         self.text = text
         print("✅ Text set in AI for question generation.")
 
@@ -100,10 +98,10 @@ class AI:
             return None, None
 
     def text_to_speech(self, text, language="sv"):
-        """EN: Converts given text into speech using Google Text-to-Speech and saves it as an audio file.
-           SV: Konverterar given text till tal med Google Text-to-Speech och sparar det som en ljudfil."""
+        """EN: Converts text into speech using Google Text-to-Speech and saves it as an audio file.
+           SV: Konverterar text till tal med Google Text-to-Speech och sparar det som en ljudfil."""
         if not text:
-            print("❌ No text for text-to-speech conversion.")
+            print("❌ No text provided for text-to-speech conversion.")
             return None
 
         try:
@@ -117,5 +115,5 @@ class AI:
             print(f"🔊 Audio file created: {audio_path}")
             return audio_path
         except Exception as e:
-            print(f"❌ Error in text-to-speech conversion: {e}")
+            print(f"❌ Error during text-to-speech conversion: {e}")
             return None
