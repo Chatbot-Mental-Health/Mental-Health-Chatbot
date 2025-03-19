@@ -61,21 +61,21 @@ class ChatbotApp:
 
         # 🔵 History button
         self.history_button = tk.Button(
-            self.top_frame, text="Visa Historik", command=self.open_history_window,
+            self.top_frame, text="View History", command=self.open_history_window,
             font=("Arial", 12), bg="#5DADE2", fg="white"
         )
         self.history_button.grid(row=0, column=1, sticky="ew", padx=5)
 
         # 🔵 Login/Logout button
         self.auth_button = tk.Button(
-            self.top_frame, text="Logga in", command=self.open_login_window,
+            self.top_frame, text="Log in", command=self.open_login_window,
             font=("Arial", 12), bg="#5DADE2", fg="white"
         )
         self.auth_button.grid(row=0, column=2, sticky="ew", padx=5)
 
         # 🟢 Status Label (below buttons)
         self.status_label = tk.Label(
-            self.top_frame, text="Inte inloggad", font=("Arial", 12), bg="#E8F6F3", fg="red"
+            self.top_frame, text="Not logged in", font=("Arial", 12), bg="#E8F6F3", fg="red"
         )
         self.status_label.grid(row=1, column=0, columnspan=3, sticky="ew", pady=5)
 
@@ -100,7 +100,7 @@ class ChatbotApp:
 
         # 🟡 Send Button
         self.send_button = tk.Button(
-            self.bottom_frame, text="Skicka", command=self.send_message,
+            self.bottom_frame, text="Send", command=self.send_message,
             font=("Arial", 12), bg="#5DADE2", fg="white"
         )
         self.send_button.grid(row=0, column=1, sticky="ew")
@@ -138,8 +138,8 @@ class ChatbotApp:
         """Uppdaterar UI och lagrar användarens e-post vid lyckad inloggning."""
         self.current_user = email
         self.is_logged_in = True
-        self.status_label.config(text=f"Inloggad som {email}", fg="green")
-        self.auth_button.config(text="Logga ut", command=self.logout)
+        self.status_label.config(text=f"Logged in as {email}", fg="green")
+        self.auth_button.config(text="Log out", command=self.logout)
         self.ask_for_mood()
 
     def ask_for_mood(self):
@@ -159,7 +159,7 @@ class ChatbotApp:
 
         # Kontrollera om användaren är inloggad
         if not self.is_logged_in:
-            messagebox.showwarning("Ej inloggad", "Logga in först för att använda chatten.")
+            messagebox.showwarning("Not logged in", "Log in first to use chat.")
             return
 
         # Hämta och rensa användarens meddelande
@@ -195,8 +195,8 @@ class ChatbotApp:
             ai_response = self.ai_response_function(user_message)  # Hämta AI-svar
             self.update_chat_window(f"Bot: {ai_response}\n")
         except Exception as e:
-            self.update_chat_window("Bot: Tyvärr, jag kan inte svara just nu.")
-            print(f"Fel vid AI-anrop: {e}")  # Skriver ut felet i terminalen för debugging
+            self.update_chat_window("Bot: Sorry, I can't reply right now.")
+            print(f"Connection error with AI: {e}")  # Skriver ut felet i terminalen för debugging
 
     def update_chat_window(self, message):
         """Uppdaterar chattfönstret med ett nytt meddelande."""
@@ -209,8 +209,8 @@ class ChatbotApp:
         """Hanterar utloggning och rensar chattfönstret."""
         self.current_user = None
         self.is_logged_in = False
-        self.status_label.config(text="Inte inloggad", fg="red")
-        self.auth_button.config(text="Logga in", command=self.open_login_window)
+        self.status_label.config(text="Not logged in", fg="red")
+        self.auth_button.config(text="Login", command=self.open_login_window)
         self.chat_window.config(state=tk.NORMAL)
         self.chat_window.delete("1.0", tk.END)
         self.chat_window.config(state=tk.DISABLED)
@@ -222,7 +222,7 @@ class ChatbotApp:
     def open_history_window(self):
         """Öppnar fönstret för att visa chattens historik och gömmer huvudfönstret."""
         if not self.is_logged_in:
-            messagebox.showwarning("Ej inloggad", "Logga in först för att visa historik.")
+            messagebox.showwarning("Signed out", "Log in to view history.")
             return
 
         self.root.withdraw()  # Dölj huvudfönstret
